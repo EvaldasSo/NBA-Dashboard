@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option java_package = "com.example.nba.datastore";
+option java_multiple_files = true;
+
+enum TeamSortProto {
+  UNSPECIFIED = 0;
+  NONE = 1;
+  BY_NAME = 2;
+  BY_CITY = 3;
+  BY_CONFERENCE = 4;
+}

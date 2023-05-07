@@ -14,12 +14,23 @@
  * limitations under the License.
  */
 
-package com.example.nba.data.common.decoder
+package com.example.nba.data.repository
 
-import android.net.Uri
-import com.example.nba.data.common.decoder.StringDecoder
+import com.example.nba.datastore.NbaPreferencesDataSource
+import com.example.nba.domain.model.TeamSort
+import com.example.nba.domain.model.UserData
+import com.example.nba.domain.repository.UserDataRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class UriDecoder @Inject constructor() : StringDecoder {
-    override fun decodeString(encodedString: String): String = Uri.decode(encodedString)
+class UserDataRepositoryImpl @Inject constructor(
+    private val nbaPreferencesDataSource: NbaPreferencesDataSource,
+) : UserDataRepository {
+
+    override val userData: Flow<UserData> =
+        nbaPreferencesDataSource.userData
+
+    override suspend fun setTeamSort(teamSort: TeamSort) {
+        nbaPreferencesDataSource.setTeamSort(teamSort)
+    }
 }

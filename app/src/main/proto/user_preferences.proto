@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+import "team_sort_config.proto";
+
+option java_package = "com.example.nba.datastore";
+option java_multiple_files = true;
+
+message UserPreferences {
+  TeamSortProto team_sort = 1;
+
+}
