@@ -21,4 +21,5 @@ interface DataModule {
     fun bindsUserDataRepository(
         userDataRepository: UserDataRepositoryImpl,
     ): UserDataRepository
+
 }

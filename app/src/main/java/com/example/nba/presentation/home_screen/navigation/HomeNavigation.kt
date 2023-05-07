@@ -13,7 +13,7 @@ fun NavController.navigateToHome(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.homeScreen(
-    onTeamClick: (String) -> Unit
+    onTeamClick: (Int) -> Unit
 ) {
     composable(route = homeNavigationRoute) {
         HomeRoute(onTeamClick)

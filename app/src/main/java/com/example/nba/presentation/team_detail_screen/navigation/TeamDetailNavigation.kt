@@ -30,14 +30,15 @@ import com.example.nba.presentation.team_detail_screen.TeamDetailRoute
 @VisibleForTesting
 internal const val teamIdArg = "teamId"
 
-internal class TeamDetailArgs(val teamId: String) {
+internal class TeamDetailArgs(val teamId: Int) {
     constructor(savedStateHandle: SavedStateHandle, stringDecoder: StringDecoder) :
-        this(stringDecoder.decodeString(checkNotNull(savedStateHandle[teamIdArg])))
+        this(checkNotNull(savedStateHandle[teamIdArg]))
+        //this(stringDecoder.decodeString(checkNotNull(savedStateHandle[teamIdArg])))
 }
 
-fun NavController.navigateToTeamDetail(teamId: String) {
-    val encodedId = Uri.encode(teamId)
-    this.navigate("team_detail_route/$encodedId")
+fun NavController.navigateToTeamDetail(teamId: Int) {
+    //val encodedId = Uri.encode(teamId)
+    this.navigate("team_detail_route/$teamId")
 }
 
 fun NavGraphBuilder.teamDetailScreen(
@@ -46,7 +47,7 @@ fun NavGraphBuilder.teamDetailScreen(
     composable(
         route = "team_detail_route/{$teamIdArg}",
         arguments = listOf(
-            navArgument(teamIdArg) { type = NavType.StringType },
+            navArgument(teamIdArg) { type = NavType.IntType },
         ),
     ) {
         TeamDetailRoute(onBackClick = onBackClick)
