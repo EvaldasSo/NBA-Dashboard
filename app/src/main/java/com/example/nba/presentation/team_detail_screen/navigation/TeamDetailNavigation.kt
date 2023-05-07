@@ -24,7 +24,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.nba.data.common.decoder.StringDecoder
+import com.example.nba.common.decoder.StringDecoder
 import com.example.nba.presentation.team_detail_screen.TeamDetailRoute
 
 @VisibleForTesting
