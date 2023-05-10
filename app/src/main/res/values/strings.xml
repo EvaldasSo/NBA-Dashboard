@@ -11,4 +11,8 @@
     <string name="name">Name</string>
     <string name="city">City</string>
     <string name="conference">Conference</string>
+    <string name="home_name">Home\nName</string>
+    <string name="home_score">Home\nScore</string>
+    <string name="visitor_name">Visitor\nName</string>
+    <string name="visitor_score">Visitor\nScore</string>
 </resources>
