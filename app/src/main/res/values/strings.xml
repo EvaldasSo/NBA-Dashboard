@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">nba</string>
-    <string name="unknown">unknown</string>
+    <string name="unknown">Unknown</string>
     <string name="home">Home</string>
     <string name="players">Players</string>
     <string name="sort">Sort by</string>
@@ -9,6 +9,7 @@
     <string name="dismiss_dialog_button_text">OK</string>
     <string name="not_connected">⚠️ You aren’t connected to the internet</string>
     <string name="name">Name</string>
+    <string name="none">None</string>
     <string name="city">City</string>
     <string name="conference">Conference</string>
     <string name="home_name">Home\nName</string>

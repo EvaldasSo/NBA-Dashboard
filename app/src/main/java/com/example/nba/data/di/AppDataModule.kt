@@ -15,8 +15,9 @@ import com.example.nba.data.util.Constants.BASE_URL
 import com.example.nba.domain.repository.GameMatchRepository
 import com.example.nba.domain.repository.TeamRepository
 import com.example.nba.domain.use_case.game_match.GetMatchGamesUseCase
-import com.example.nba.domain.use_case.game_match.GetTeamByIdUseCase
+import com.example.nba.domain.use_case.team.GetTeamByIdUseCase
 import com.example.nba.domain.use_case.game_match.GameMatchUseCases
+import com.example.nba.domain.use_case.team.GetTeamsUseCase
 import com.example.nba.domain.use_case.team.TeamUseCases
 import dagger.Module
 import dagger.Provides
@@ -67,21 +68,6 @@ object AppDataModule {
 
     @Provides
     @Singleton
-    fun provideNbaPager(nbaDb: NbaDatabase, nbaApi: NbaApi): Pager<Int, TeamEntity> {
-        return Pager(
-            config = PagingConfig(pageSize = 20),
-            remoteMediator = TeamRemoteMediator(
-                nbaDb = nbaDb,
-                nbaApi = nbaApi
-            ),
-            pagingSourceFactory = {
-                nbaDb.dao.pagingSource()
-            }
-        )
-    }
-
-    @Provides
-    @Singleton
     fun provideGameMatchRepository(
         nbaDb: NbaDatabase,
         nbaApi: NbaApi
@@ -101,15 +87,18 @@ object AppDataModule {
     @Singleton
     fun provideTeamRepository(
         nbaDb: NbaDatabase,
+        nbaApi: NbaApi
     ): TeamRepository =
         TeamRepositoryImpl(
             nbaDb = nbaDb,
+            nbaApi = nbaApi,
         )
 
     @Provides
     @Singleton
     fun provideTeamUseCases(teamRepository: TeamRepository) = TeamUseCases(
         getTeamByIdUseCase = GetTeamByIdUseCase(teamRepository = teamRepository),
+        getTeamsUseCase =  GetTeamsUseCase(teamRepository = teamRepository)
     )
 
 

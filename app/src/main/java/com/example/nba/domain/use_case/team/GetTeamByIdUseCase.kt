@@ -1,4 +1,4 @@
-package com.example.nba.domain.use_case.game_match
+package com.example.nba.domain.use_case.team
 
 import com.example.nba.domain.model.Team
 import com.example.nba.domain.repository.TeamRepository

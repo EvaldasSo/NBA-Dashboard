@@ -30,6 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.nba.R
 import com.example.nba.domain.model.TeamSort
+import com.example.nba.domain.model.UserPreferences
 
 @Composable
 fun UserPrefsDialog(
@@ -138,6 +139,11 @@ private fun SettingsPanel(
 ) {
     SettingsDialogSectionTitle(text = stringResource(R.string.team_category))
     Column(Modifier.selectableGroup()) {
+        SettingsDialogThemeChooserRow(
+            text = stringResource(R.string.none),
+            selected = userPreferences.teamSortBy == TeamSort.NONE,
+            onClick = { onChangeTeamSort(TeamSort.NONE) },
+        )
         SettingsDialogThemeChooserRow(
             text = stringResource(R.string.name),
             selected = userPreferences.teamSortBy == TeamSort.NAME,

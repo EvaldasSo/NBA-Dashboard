@@ -15,8 +15,8 @@ class NbaPreferencesDataSource @Inject constructor(
                 teamSortConfig = when (it.teamSort) {
                     null,
                     TeamSortProto.UNSPECIFIED,
-                    TeamSortProto.NONE,
                     TeamSortProto.UNRECOGNIZED,
+                    TeamSortProto.NONE -> TeamSort.NONE
                     TeamSortProto.BY_NAME -> TeamSort.NAME
                     TeamSortProto.BY_CITY -> TeamSort.CITY
                     TeamSortProto.BY_CONFERENCE -> TeamSort.CONFERENCE
@@ -28,6 +28,7 @@ class NbaPreferencesDataSource @Inject constructor(
         userPreferences.updateData { currentPreferences ->
             currentPreferences.toBuilder().apply {
                 this.teamSort = when (teamSort) {
+                    TeamSort.NONE -> TeamSortProto.NONE
                     TeamSort.NAME -> TeamSortProto.BY_NAME
                     TeamSort.CITY -> TeamSortProto.BY_CITY
                     TeamSort.CONFERENCE -> TeamSortProto.BY_CONFERENCE

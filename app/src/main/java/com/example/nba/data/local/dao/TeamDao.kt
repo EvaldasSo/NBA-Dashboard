@@ -14,8 +14,24 @@ interface TeamDao {
     @Upsert
     suspend fun upsertAll(teams: List<TeamEntity>)
 
-    @Query("SELECT * FROM $TEAM_TABLE")
-    fun pagingSource(): PagingSource<Int, TeamEntity>
+    //TODO::This is to complex to read.
+    @Query("""
+    SELECT * FROM team_table
+    ORDER BY
+        NULLIF(TRIM(CASE :sortBy
+            WHEN 'city' THEN city
+            WHEN 'conference' THEN conference
+            WHEN 'fullName' THEN fullName
+            WHEN 'none' THEN null
+        END), '') IS NULL ASC,
+        TRIM(CASE :sortBy
+            WHEN 'city' THEN city
+            WHEN 'conference' THEN conference
+            WHEN 'fullName' THEN fullName
+            WHEN 'none' THEN null
+        END)
+""")
+    fun pagingSource(sortBy: String): PagingSource<Int, TeamEntity>
 
     @Query("DELETE FROM $TEAM_TABLE")
     suspend fun clearAll()

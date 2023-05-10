@@ -29,6 +29,7 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -43,12 +44,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.example.nba.R
 import com.example.nba.domain.model.Team
+import com.example.nba.domain.model.TeamSort
 import com.example.nba.presentation.home_screen.search_screen.PlayerScreen
 import com.example.nba.presentation.home_screen.user_preferences_dialog.UserPrefsDialog
 import kotlinx.coroutines.launch
@@ -93,7 +96,9 @@ fun HomeRoute(
         HorizontalPager(
             pageCount = tabs.size,
             state = pagerState,
-            modifier = Modifier.fillMaxHeight(1f).weight(1f)
+            modifier = Modifier
+                .fillMaxHeight(1f)
+                .weight(1f)
         ) {
             tabs[pagerState.currentPage].screen(onTeamClick)
         }
@@ -115,6 +120,7 @@ fun HomeRoute(
         }
     }
 }
+
 @Composable
 fun list(
     onTeamClick: (Int) -> Unit = {},
@@ -154,7 +160,7 @@ fun list(
                 }
             }
             item {
-                if(teams.loadState.append is LoadState.Loading) {
+                if (teams.loadState.append is LoadState.Loading) {
                     CircularProgressIndicator()
                 }
             }
@@ -172,11 +178,11 @@ fun TeamInfoRow(
     onTeamClick: () -> Unit = {},
 ) {
     Row(
-        modifier = modifier.clickable { if(showImage) onTeamClick() },
+        modifier = modifier.clickable { if (showImage) onTeamClick() },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly,
 
-    ) {
+        ) {
         Text(
             text = name,
             modifier = Modifier.weight(1f),
@@ -237,7 +243,7 @@ fun NbaIcon(
 fun homeHeader(
     modifier: Modifier = Modifier,
     title: Int = R.string.unknown,
-    buttonTitle: String = "unknown",
+    buttonTitle: String = stringResource(R.string.none),
 ) {
     val showDialog = remember { mutableStateOf(false) }
 
@@ -281,10 +287,11 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val teams = viewModel.teamPagingFlow.collectAsLazyPagingItems()
+    val preferenceUiState by viewModel.preferenceUiState.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
     LaunchedEffect(key1 = teams.loadState) {
-        if(teams.loadState.refresh is LoadState.Error) {
+        if (teams.loadState.refresh is LoadState.Error) {
             Toast.makeText(
                 context,
                 "Error: " + (teams.loadState.refresh as LoadState.Error).error.message,
@@ -297,9 +304,21 @@ fun HomeScreen(
         modifier = Modifier.fillMaxSize(),
     ) {
         Row {
-            homeHeader(title = title)
+            homeHeader(
+                title = title,
+                buttonTitle = when (preferenceUiState) {
+                    is PreferenceUiState.Loading -> stringResource(R.string.none)
+                    is PreferenceUiState.Success ->
+                        when ((preferenceUiState as PreferenceUiState.Success).userPreferences.teamSortBy) {
+                            TeamSort.NONE -> stringResource(R.string.none)
+                            TeamSort.NAME -> stringResource(R.string.name)
+                            TeamSort.CITY -> stringResource(R.string.city)
+                            TeamSort.CONFERENCE -> stringResource(R.string.conference)
+                        }
+                }
+            )
         }
-        if(teams.loadState.refresh is LoadState.Loading) {
+        if (teams.loadState.refresh is LoadState.Loading) {
             Box(
                 modifier = Modifier.fillMaxSize()
             ) {

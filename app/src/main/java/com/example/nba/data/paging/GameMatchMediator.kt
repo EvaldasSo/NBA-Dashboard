@@ -1,5 +1,6 @@
 package com.example.nba.data.paging
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -11,6 +12,7 @@ import com.example.nba.data.local.entity.GameMatchKeysEntity
 import com.example.nba.data.mapper.toGameMatchEntity
 import com.example.nba.data.remote.NbaApi
 import com.example.nba.data.util.Constants.GAME_MATCH_PER_PAGE
+import kotlinx.coroutines.delay
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -39,16 +41,9 @@ class GameMatchMediator(
                 LoadType.REFRESH -> null
                 LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
                 LoadType.APPEND -> {
-                    // Query DB for SubredditRemoteKey for the subreddit.
-                    // SubredditRemoteKey is a wrapper object we use to keep track of page keys we
-                    // receive from the Reddit API to fetch the next or previous page.
                     val remoteKey = nbaDB.withTransaction {
                         gamesMatchKeysDao.getRemoteKey(teamId)
                     }
-
-                    // We must explicitly check if the page key is null when appending, since the
-                    // Reddit API informs the end of the list by returning null for page key, but
-                    // passing a null key to Reddit API will fetch the initial page.
                     if (remoteKey.nextPageKey == null) {
                         return MediatorResult.Success(endOfPaginationReached = true)
                     }

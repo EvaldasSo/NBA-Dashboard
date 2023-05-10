@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.nba.domain.repository.UserDataRepository
 import com.example.nba.domain.model.TeamSort
+import com.example.nba.domain.model.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -31,16 +32,13 @@ class UserPrefsViewModel @Inject constructor(
                 started = SharingStarted.Eagerly,
                 initialValue = UiState.Loading,
             )
+
     fun updateTeamSort(sortBy: TeamSort) {
         viewModelScope.launch {
             userDataRepository.setTeamSort(sortBy)
         }
     }
 }
-
-data class UserPreferences(
-    val teamSortBy: TeamSort,
-)
 
 sealed interface UiState {
     object Loading : UiState
