@@ -5,12 +5,15 @@
     <string name="players">Players</string>
     <string name="sort">Sort by</string>
     <string name="team_category">Team category</string>
-    <string name="loading">Loading...</string>
+    <string name="loading">Loading…</string>
     <string name="dismiss_dialog_button_text">OK</string>
     <string name="not_connected">⚠️ You aren’t connected to the internet</string>
     <string name="name">Name</string>
     <string name="none">None</string>
     <string name="city">City</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="team">Team</string>
     <string name="conference">Conference</string>
     <string name="home_name">Home\nName</string>
     <string name="home_score">Home\nScore</string>

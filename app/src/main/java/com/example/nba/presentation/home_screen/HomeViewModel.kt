@@ -9,8 +9,8 @@ import com.example.nba.domain.model.TeamSort
 import com.example.nba.domain.model.UserPreferences
 import com.example.nba.domain.repository.UserDataRepository
 import com.example.nba.domain.use_case.team.TeamUseCases
-import com.example.nba.presentation.home_screen.user_preferences_dialog.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -22,14 +22,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    pagerFactory: TeamUseCases,
+    teamUseCases: TeamUseCases,
     userDataRepository: UserDataRepository,
 ) : ViewModel() {
 
     private val _teamSort = MutableStateFlow(TeamSort.NONE)
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     val teamPagingFlow = _teamSort.flatMapLatest { teamSort ->
-        pagerFactory.getTeamsUseCase(teamSort)
+        teamUseCases.getTeamsUseCase(teamSort)
             .map { pagingData ->
                 pagingData.map { it.toTeam() }
             }

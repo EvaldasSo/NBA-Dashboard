@@ -11,5 +11,6 @@ object Constants {
 
     const val TEAM_ITEMS_PER_PAGE = 30
     const val GAME_MATCH_PER_PAGE = 25
+    const val SEARCH_TEAM_PER_PAGE = 25
 
 }

@@ -22,7 +22,7 @@ import javax.inject.Inject
 class TeamDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     stringDecoder: StringDecoder,
-    pagerFactory: GameMatchUseCases,
+    gameMatchUseCases: GameMatchUseCases,
     teamUseCases: TeamUseCases,
 ) : ViewModel() {
 
@@ -30,7 +30,7 @@ class TeamDetailViewModel @Inject constructor(
 
     val teamId = teamDetailArgs.teamId
 
-    val gameMatchPagingFlow = pagerFactory.getMatchGamesUseCase(teamId)
+    val gameMatchPagingFlow = gameMatchUseCases.getMatchGamesUseCase(teamId)
         .map { pagingData ->
             pagingData.map { it.toGameMatch() }
         }

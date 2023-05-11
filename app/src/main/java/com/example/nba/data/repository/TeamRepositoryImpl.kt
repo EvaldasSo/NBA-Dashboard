@@ -22,13 +22,14 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.nba.data.local.database.NbaDatabase
-import com.example.nba.data.local.entity.GameMatchEntity
 import com.example.nba.data.local.entity.TeamEntity
 import com.example.nba.data.mapper.toTeam
-import com.example.nba.data.paging.GameMatchMediator
+import com.example.nba.data.paging.SearchPlayerPagingSource
 import com.example.nba.data.paging.TeamRemoteMediator
 import com.example.nba.data.remote.NbaApi
 import com.example.nba.data.util.Constants
+import com.example.nba.data.util.Constants.SEARCH_TEAM_PER_PAGE
+import com.example.nba.domain.model.Player
 import com.example.nba.domain.model.Team
 import com.example.nba.domain.model.TeamSort
 import com.example.nba.domain.repository.TeamRepository
@@ -68,5 +69,14 @@ class TeamRepositoryImpl @Inject constructor(
 
             nbaDb.dao.pagingSource(teamSort)
         }.flow
+    }
+
+    override fun searchPlayer(query: String): Flow<PagingData<Player>> {
+        return Pager(
+            config = PagingConfig(pageSize = SEARCH_TEAM_PER_PAGE),
+            pagingSourceFactory = {
+                SearchPlayerPagingSource(nbaApi = nbaApi, query = query)
+            }
+        ).flow
     }
 }

@@ -16,7 +16,6 @@
 
 package com.example.nba.presentation.team_detail_screen.navigation
 
-import android.net.Uri
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController

@@ -1,14 +1,9 @@
 package com.example.nba.data.di
 
 import android.content.Context
-import androidx.paging.ExperimentalPagingApi
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.room.Room
 import com.example.nba.data.local.database.NbaDatabase
-import com.example.nba.data.local.entity.TeamEntity
 import com.example.nba.data.remote.NbaApi
-import com.example.nba.data.paging.TeamRemoteMediator
 import com.example.nba.data.repository.GameMatchRepositoryImpl
 import com.example.nba.data.repository.TeamRepositoryImpl
 import com.example.nba.data.util.Constants.BASE_URL
@@ -17,6 +12,7 @@ import com.example.nba.domain.repository.TeamRepository
 import com.example.nba.domain.use_case.game_match.GetMatchGamesUseCase
 import com.example.nba.domain.use_case.team.GetTeamByIdUseCase
 import com.example.nba.domain.use_case.game_match.GameMatchUseCases
+import com.example.nba.domain.use_case.team.GetPlayerByNameUseCase
 import com.example.nba.domain.use_case.team.GetTeamsUseCase
 import com.example.nba.domain.use_case.team.TeamUseCases
 import dagger.Module
@@ -30,7 +26,6 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-@OptIn(ExperimentalPagingApi::class)
 @Module
 @InstallIn(SingletonComponent::class)
 object AppDataModule {
@@ -98,7 +93,8 @@ object AppDataModule {
     @Singleton
     fun provideTeamUseCases(teamRepository: TeamRepository) = TeamUseCases(
         getTeamByIdUseCase = GetTeamByIdUseCase(teamRepository = teamRepository),
-        getTeamsUseCase =  GetTeamsUseCase(teamRepository = teamRepository)
+        getTeamsUseCase =  GetTeamsUseCase(teamRepository = teamRepository),
+        getPlayerByNameUseCase = GetPlayerByNameUseCase(teamRepository = teamRepository)
     )
 
 

@@ -14,7 +14,7 @@ interface TeamDao {
     @Upsert
     suspend fun upsertAll(teams: List<TeamEntity>)
 
-    //TODO::This is to complex to read.
+    //TODO::Tight coupling
     @Query("""
     SELECT * FROM team_table
     ORDER BY
