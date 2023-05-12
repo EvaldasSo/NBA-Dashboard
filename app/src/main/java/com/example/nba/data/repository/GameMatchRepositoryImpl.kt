@@ -39,6 +39,8 @@ class GameMatchRepositoryImpl @Inject constructor(
         return Pager(
             config = PagingConfig(
                 pageSize = Constants.GAME_MATCH_PER_PAGE,
+                initialLoadSize = 50,
+                prefetchDistance = 10,
                 enablePlaceholders = false
             ),
             remoteMediator = GameMatchMediator(
@@ -46,7 +48,7 @@ class GameMatchRepositoryImpl @Inject constructor(
                 nbaDB = nbaDb,
                 nbaApi = nbaApi
             )
-        ){
+        ) {
             nbaDb.gameMatchDao.getPagingSource(gameId)
         }.flow
     }

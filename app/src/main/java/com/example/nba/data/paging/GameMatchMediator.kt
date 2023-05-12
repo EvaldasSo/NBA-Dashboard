@@ -27,9 +27,7 @@ class GameMatchMediator(
     private val gamesMatchKeysDao = nbaDB.gameMatchKeysDao()
 
     override suspend fun initialize(): InitializeAction {
-        // Require that remote REFRESH is launched on initial load and succeeds before launching
-        // remote PREPEND / APPEND.
-        return InitializeAction.LAUNCH_INITIAL_REFRESH
+        return InitializeAction.SKIP_INITIAL_REFRESH
     }
 
     override suspend fun load(
@@ -44,11 +42,14 @@ class GameMatchMediator(
                     val remoteKey = nbaDB.withTransaction {
                         gamesMatchKeysDao.getRemoteKey(teamId)
                     }
-                    if (remoteKey.nextPageKey == null) {
-                        return MediatorResult.Success(endOfPaginationReached = true)
-                    }
+                    when {
+                        remoteKey == null -> null
+                        remoteKey.nextPageKey == null -> return MediatorResult.Success(
+                            endOfPaginationReached = true
+                        )
 
-                    remoteKey.nextPageKey
+                        else -> remoteKey.nextPageKey
+                    }
                 }
             }
 
@@ -64,7 +65,7 @@ class GameMatchMediator(
                     gamesMatchKeysDao.deleteByKey(teamId)
                 }
 
-                val gameMatchEntities = response.data.map { it.toGameMatchEntity() }
+                val gameMatchEntities = response.data.map { it.toGameMatchEntity(teamId) }
                 gameMatchDao.insertAll(gameMatches = gameMatchEntities)
                 gamesMatchKeysDao.insert(GameMatchKeysEntity(id = teamId, response.meta.next_page))
             }

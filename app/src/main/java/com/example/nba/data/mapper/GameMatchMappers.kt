@@ -4,10 +4,10 @@ import com.example.nba.data.local.entity.GameMatchEntity
 import com.example.nba.data.remote.dto.Data
 import com.example.nba.domain.model.GameMatch
 
-fun Data.toGameMatchEntity(): GameMatchEntity {
+fun Data.toGameMatchEntity(teamId: Int): GameMatchEntity {
     return GameMatchEntity(
         id = id,
-        teamId = home_team.id,
+        teamId = teamId,
         homeName = home_team.name,
         homeScore = home_team_score,
         visitorName = visitor_team.name,
