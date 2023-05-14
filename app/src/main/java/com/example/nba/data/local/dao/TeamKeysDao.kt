@@ -13,7 +13,7 @@ interface TeamKeysDao {
     suspend fun insert(keys: TeamKeysEntity)
 
     @Query("SELECT * FROM $TEAM_KEYS")
-    suspend fun getRemoteKey(): TeamKeysEntity
+    suspend fun getRemoteKey(): TeamKeysEntity?
 
     @Query("DELETE FROM $TEAM_KEYS")
     suspend fun clearAll()

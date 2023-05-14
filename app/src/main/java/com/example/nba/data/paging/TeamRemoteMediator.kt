@@ -24,7 +24,7 @@ class TeamRemoteMediator(
     override suspend fun initialize(): InitializeAction {
         // Require that remote REFRESH is launched on initial load and succeeds before launching
         // remote PREPEND / APPEND.
-        return InitializeAction.LAUNCH_INITIAL_REFRESH
+        return InitializeAction.SKIP_INITIAL_REFRESH
     }
 
     override suspend fun load(
@@ -37,15 +37,21 @@ class TeamRemoteMediator(
                 LoadType.PREPEND -> return MediatorResult.Success(
                     endOfPaginationReached = true
                 )
+
                 LoadType.APPEND -> {
                     val remoteKey = nbaDb.withTransaction {
                         teamKeysDao.getRemoteKey()
                     }
-                    if (remoteKey.nextPageKey == null) {
-                        return MediatorResult.Success(endOfPaginationReached = true)
+
+                    when {
+                        remoteKey == null -> null
+                        remoteKey.nextPageKey == null -> return MediatorResult.Success(
+                            endOfPaginationReached = true
+                        )
+
+                        else -> remoteKey.nextPageKey
                     }
 
-                    remoteKey.nextPageKey
                 }
             }
 

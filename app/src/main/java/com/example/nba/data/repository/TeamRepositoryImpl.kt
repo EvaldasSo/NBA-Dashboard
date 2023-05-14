@@ -53,6 +53,8 @@ class TeamRepositoryImpl @Inject constructor(
         return Pager(
             config = PagingConfig(
                 pageSize = Constants.TEAM_ITEMS_PER_PAGE,
+                initialLoadSize = 60,
+                prefetchDistance = 10,
                 enablePlaceholders = false
             ),
             remoteMediator = TeamRemoteMediator(
